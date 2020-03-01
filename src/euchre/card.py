@@ -1,23 +1,29 @@
 """
 Playing card (duh)
 """
+from euchre.suit import Suit
+from euchre.rank import Rank
+
+s = Suit()
+r = Rank()
 
 
 class Card:
-    def __init__(self, rank, suit):
-        self.rank_names = {"7": "Seven", "8": "Eight", "9": "Nine", "10": "Ten",
-                      "J": "Jack", "Q": "Queen", "K": "King", "A": "Ace"}
-        self.suit_names = {"S": "Spades", "D": "Diamonds", "H": "Hearts", "C": "Clubs"}
-        self.suit_symbols = {"H": "♥", "D": "♦", "C": "♣", "S": "♠"}
-        self.rank = rank
-        self.suit = suit
-        self.symbol = suit_symbols[suit]
-
-    def __repr__(self):
-        return rank_names[self.rank] + " of " + suit_names[self.suit]
+    def __init__(self, card_rank, card_suit):
+        self.rank = card_rank
+        self.suit = card_suit
+        self.suit_symbol = s.symbols[card_suit]
+        self.suit_name = s.names[card_suit]
+        self.rank_name = r.names[card_rank]
 
     def __str__(self):
-        return self.rank + self.symbol
+        return self.rank_name + " of " + self.suit_name
+
+    def __repr__(self):
+        return self.rank + self.suit_symbol
+
+    def __eq__(self, other):
+        return self.__repr__() == other.__repr__()
 
 
 # class CardHandTrick(Card):

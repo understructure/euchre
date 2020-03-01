@@ -2,7 +2,7 @@ import pytest
 
 from euchre.hand import Hand
 from euchre.deck import Deck
-from euchre.players import Player
+from euchre.player import Player
 
 
 @pytest.fixture()
