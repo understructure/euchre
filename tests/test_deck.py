@@ -1,9 +1,30 @@
-import pytest
-
 from euchre.deck import Deck
 from euchre.card import Card
-d = Deck()
-d.get_card_ranks_by_trump_and_led(trump="C", led_card=Card(card_rank="J", card_suit="S"))
+
+
+def test_get_card_ranks_by_trump_and_led():
+    d = Deck(low_rank="9")
+    card = Card("A", "S")
+    rez = d.get_card_ranks_by_trump_and_led("S", card)
+    assert [repr(x) for x in rez] == ["J♠", "J♣", "A♠", "K♠", "Q♠", "10♠", "9♠"]
+
+    # when non-bower suit is led, J should be in the rankings
+    # for the non-trump and non-bower suit
+
+    card = Card("A", "D")
+    rez = d.get_card_ranks_by_trump_and_led("S", card)
+    assert [repr(x) for x in rez] == ["J♠", "J♣", "A♠", "K♠", "Q♠", "10♠", "9♠",
+                   "A♦", "K♦", "Q♦","J♦", "10♦", "9♦"]
+
+    card = Card("A", "H")
+    rez = d.get_card_ranks_by_trump_and_led("S", card)
+    assert [repr(x) for x in rez] == ["J♠", "J♣", "A♠", "K♠", "Q♠", "10♠", "9♠",
+                   "A♥", "K♥", "Q♥", "J♥", "10♥", "9♥"]
+
+    card = Card("A", "C")
+    rez = d.get_card_ranks_by_trump_and_led("S", card)
+    assert [repr(x) for x in rez] == ["J♠", "J♣", "A♠", "K♠", "Q♠", "10♠", "9♠",
+                   "A♣", "K♣", "Q♣", "10♣", "9♣"]
 
 # @pytest.mark.parametrize(
 #     "test_input,expected", [(9, 24), (8, 28), (7, 32),
@@ -33,8 +54,3 @@ d.get_card_ranks_by_trump_and_led(trump="C", led_card=Card(card_rank="J", card_s
 #     print(ranked_cards)
 #     # assert ranked_cards == expected
 #     assert len(ranked_cards) == 7
-
-
-def test_deck():
-    d = Deck()
-    print(d.)

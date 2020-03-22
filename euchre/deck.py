@@ -31,7 +31,7 @@ class IllegalArgumentError(ValueError):
 
 class Deck:
     def __init__(self, low_rank=9):
-
+        low_rank = int(low_rank)
         if not 7 <= low_rank <= 9:
             raise IllegalArgumentError
         self.suits = list(suit.names.keys())
@@ -40,9 +40,6 @@ class Deck:
         # to implement these in the future
         self.ranks = ['A', 'K', 'Q', 'J'] + [str(x) for x in list(range(10, low_rank-1, -1))]
         self.non_bowers = [x for x in self.ranks if x != "J"]
-        # self.d_cards_by_suit = {s: [x for x in itertools.
-        #                         product(self.ranks, s)] for s in self.suits}
-        # self.d_cards_by_suit[None] = []
         self.cards = [Card(**dict(zip(['card_rank', 'card_suit'], x)))
                       for x in itertools.product(self.ranks, self.suits)]
         random.shuffle(self.cards)
@@ -57,27 +54,28 @@ class Deck:
         :return:
         """
         led_suit = led_card.suit
-        d_bowers = suit.d_bower_suits
-        left_bower = Card(card_rank="J", card_suit=d_bowers[trump])
+        # d_bowers = suit.d_bower_suits
+        left_bower = Card(card_rank="J", card_suit=suit.d_bower_suits[trump])
         right_bower = Card(card_rank="J", card_suit=trump)
-        lst_extra = []
         if trump is not None:
             lst_out = [right_bower, left_bower] + \
                       [Card(**dict(zip(['card_rank', 'card_suit'], x)))
                        for x in itertools.product(self.non_bowers, trump)]
-            # list(itertools.product(non_bowers, trump))
-
-            # calling left bower's suit its natural suit, should
-            # probably change it to be an honorary trump suit?
-            if trump != led_suit:
-                print(led_card == left_bower)
-                if led_card != left_bower:
-                    lst_extra = list(itertools.product(
-                        self.ranks, led_suit))
-                else:
-                    lst_extra = [Card(**dict(zip(['card_rank', 'card_suit'], x)))
-                                 for x in itertools.product(self.non_bowers, led_suit)]
+            if led_suit == trump:
+                lst_extra = []
+            else:
+                lst_extra = self.get_non_trump_led_suit_ranks(trump, led_suit)
         else:
             lst_out = list(itertools.product(self.ranks, led_suit))
         lst_out += lst_extra
         return lst_out
+
+    def get_non_trump_led_suit_ranks(self, trump, led_suit):
+        if not led_suit == suit.d_bower_suits[trump]:
+            lst_extra = [Card(**dict(zip(['card_rank', 'card_suit'], x)))
+                     for x in itertools.product(self.ranks, led_suit)]
+
+        else:
+            lst_extra = [Card(**dict(zip(['card_rank', 'card_suit'], x)))
+                 for x in itertools.product(self.non_bowers, led_suit)]
+        return lst_extra

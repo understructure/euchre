@@ -1,3 +1,8 @@
+"""
+I hold information for card suit names and symbols.
+TODO: Implement Joker here?
+"""
+
 
 class Suit:
     def __init__(self):

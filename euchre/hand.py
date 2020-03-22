@@ -14,27 +14,24 @@ as agreed beforehand, wins the game. In the 5-point game,
 a side is said to be "at the bridge" when it has scored
 4 and the opponents have scored 2 or less.
 """
-
+import collections, functools, operator
 
 class Hand:
-    def __init__(self, dealer_id, deal_style, player_ids, deck, game):
+    def __init__(self, players, deal_style, deck):
         """
         Creates a Hand object that keeps track of trump,
-        what's been played, and by whom.
-        :param dealer_id: int - represents the position in the list
-                for the player that dealt so we know
-                what suit was led
+        what's been played, and by whom.  List of players
+        always has dealer as first in list.
         :param deal_style: list - [2,3,2,3], [3,2,3,2],
                 [1,2,3,4], or [4,3,2,1].  Cards are dealt in
                 two passes, once with the number of cards in
                 forward order per player, once in the list
                 order reversed.
-        :param player_ids: list - could be names, numbers, whatever
+        :param deck: a Deck object based on game stetings
+                (e.g., low card, joker added)
         """
-        self.game = game
-        self.dealer = dealer_id
-        self.players = player_ids[dealer_id:] + player_ids[:dealer_id]
-        self.hands = {p: [] for p in self.players}
+        self.players = players
+        self.dealer = players[0]
         self.deck = deck
         self.trump = None
         self.bidding_team = None
@@ -45,6 +42,15 @@ class Hand:
         self.top_card_turned_over = False
         self.tricks = []
         self.num_players = 4  # change to 3 when going alone
+        self.deal()
+        self.phase = "bidding"  # [bidding | playing | screwing]
+        self.current_player_num = None
+        self.current_player = None
+        self.set_current_player_num(num=1)
+
+    def set_current_player_num(self, num):
+        self.current_player_num = num
+        self.current_player = self.players[num]
 
     def set_trump(self, suit):
         """
@@ -56,16 +62,17 @@ class Hand:
             if suit in self.deck.suits:
                 self.trump = suit
             else:
-                print("{} not a valid suit, trump not set")
+                print("{} not a valid suit, trump not set".format(suit))
         else:
             print("Trump already set as {} for this hand".format(self.trump))
 
     def deal(self):
         for _ in range(2):
+            # for player in range(len(self.players)):
             for player in range(len(self.players)):
                 for _ in range(self.style[player]):
                     # deal off top of deck
-                    self.hands[player].append(self.deck.cards.pop(0))
+                    self.players[player].cards.append(self.deck.cards.pop(0))
             self.style.reverse()
         self.top_card = self.deck.cards.pop(0)
 
@@ -74,11 +81,13 @@ class Hand:
         self.num_players = 3
         partner_id = self.game.partner[player_id]
         self.players.remove(partner_id)
-        del self.hands[partner_id]
 
     def hand_score(self):
         num_tricks = len(self.tricks)
         if num_tricks == 5:
+            lst_trick_scores = [t.score for t in self.tricks]
+            result = dict(functools.reduce(operator.add,
+                                           map(collections.Counter, lst_trick_scores)))
             hand_scores = self.game.get_scores()
             num_winner_tricks = max(hand_scores.values())
             winning_team = [k for k in hand_scores.keys()
@@ -98,7 +107,7 @@ class Hand:
                 points = 2
             self.update_game_score(self.game, winning_team, points)
         else:
-            print("Can't score hand yet, only {} tricks of 5 played".format(num_tricks))
+            print("Can't score hand yet, only {} trick(s) of 5 played".format(num_tricks))
 
     def update_game_score(self, winning_team, points):
         total_team_points = self.game.teams[winning_team].points + points
@@ -109,3 +118,22 @@ class Hand:
                   .format(self.game.teams[0], self.game.teams[0].points,
                           self.game.teams[1], self.game.teams[1].points))
             self.game.over = True
+
+    def rotate_active_player(self):
+        """
+        Sets current_player object and current_player_num
+        Advances from 0 to 3 and then resets to 0
+        :return:
+        """
+        next_player_num = self.current_player_num + 1 \
+            if self.current_player_num < len(self.players) - 1 \
+            else 0
+        self.set_current_player_num(num=next_player_num)
+
+    def start_play(self):
+        """
+        dealer is always first player in list
+        :return:
+        """
+        self.current_player = self.players[1]
+        self.phase = "playing"

@@ -1,9 +1,9 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name='euchre',
     version='0.0.1',
-    packages=['euchre'],
+    packages=find_packages(),
     url='http://www.understructure.com/euchre',
     license='',
     author='maashu',
