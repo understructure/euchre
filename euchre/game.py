@@ -9,7 +9,6 @@ from euchre.deck import Deck
 
 class Game:
     def __init__(self, teams, points_to_win):
-        self.over = False
         self.hands = []
         self.teams = teams
         self.play_to_points = points_to_win
@@ -25,8 +24,16 @@ class Game:
         self.players[1].current_turn = True
 
     @property
-    def get_dealer(self):
-        return self.players[0]
+    def dealer(self):
+        return self.hands[-1].players[0]
+
+    @property
+    def is_over(self):
+        return not all(x.score < self.play_to_points for x in self.teams)
+
+    @property
+    def hand_number(self):
+        return len(self.hands)
 
     def set_players_order(self):
         temp = []
@@ -40,10 +47,6 @@ class Game:
         return {x: self.teams[x].score
                 for x in range(len(self.teams))}
 
-    @property
-    def hand_number(self):
-        return len(self.hands)
-
     def new_hand(self):
         deck = Deck(low_rank=self.low_rank)
         self.rotate_dealer()
@@ -53,4 +56,15 @@ class Game:
 
     def rotate_dealer(self):
         temp = self.players
-        self.players = temp[1:] + [temp[0]]
+        self.players = temp[1:] + temp[:1]
+
+    # def update_score(self):
+    #     # which is the winning team?
+    #     # how many points?
+    #     hand = self.hands[-1]
+    #     hand.score()
+    #     if self.is_over:
+    #         print("Game Over, Team {} wins!".format(winning_team))
+    #         print("Final score, Team {}: {}, Team {}: {}"
+    #               .format(self.game.teams[0], self.game.teams[0].points,
+    #                       self.game.teams[1], self.game.teams[1].points))

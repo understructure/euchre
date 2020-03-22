@@ -17,8 +17,8 @@ class Trick:
         self.cards.append(card)
         self.players.append(player)
         # hmm...
-        player.hand.cards.remove(card)
-        if len(self.cards) == 4:
+        player.cards.remove(card)
+        if len(self.cards) == hand.num_players:
             result = self.score(hand)
             return result
 

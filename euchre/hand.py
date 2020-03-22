@@ -16,6 +16,7 @@ a side is said to be "at the bridge" when it has scored
 """
 import collections, functools, operator
 
+
 class Hand:
     def __init__(self, players, deal_style, deck):
         """
@@ -34,7 +35,6 @@ class Hand:
         self.dealer = players[0]
         self.deck = deck
         self.trump = None
-        self.bidding_team = None
         self.bid_alone = False
         self.style = deal_style
         # create players list starting with dealer
@@ -47,6 +47,10 @@ class Hand:
         self.current_player_num = None
         self.current_player = None
         self.set_current_player_num(num=1)
+
+    @property
+    def bidding_team(self):
+        return
 
     def set_current_player_num(self, num):
         self.current_player_num = num
@@ -82,7 +86,7 @@ class Hand:
         partner_id = self.game.partner[player_id]
         self.players.remove(partner_id)
 
-    def hand_score(self):
+    def score(self):
         num_tricks = len(self.tricks)
         if num_tricks == 5:
             lst_trick_scores = [t.score for t in self.tricks]
@@ -105,19 +109,8 @@ class Hand:
             else:
                 # euch'd! 2 points to non-bidding team
                 points = 2
-            self.update_game_score(self.game, winning_team, points)
         else:
             print("Can't score hand yet, only {} trick(s) of 5 played".format(num_tricks))
-
-    def update_game_score(self, winning_team, points):
-        total_team_points = self.game.teams[winning_team].points + points
-        self.game.teams[winning_team].points = total_team_points
-        if total_team_points > self.game.play_to_points:
-            print("Game Over, Team {} wins!".format(winning_team))
-            print("Final score, Team {}: {}, Team {}: {}"
-                  .format(self.game.teams[0], self.game.teams[0].points,
-                          self.game.teams[1], self.game.teams[1].points))
-            self.game.over = True
 
     def rotate_active_player(self):
         """

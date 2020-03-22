@@ -18,6 +18,9 @@ class Player:
             rez = "pass"
         elif action == "call_it_up":
             rez = self.call_it_up(hand=hand, **kwargs)
+        elif action == "screw_the_dealer":
+            pass
+        return rez
 
     def call_it_up(self, hand, alone=False, **kwargs):
         rez = {"called_up": False}
@@ -51,12 +54,12 @@ class Player:
         hand.phase = "screwing"
 
     @staticmethod
-    def screwed_call_it(self, hand, trump):
+    def screwed_call_it(hand, trump):
         if not hand.top_card_turned_over:
             logger.error("Can't call this method if top card isn't turned over!")
             raise
         elif trump == hand.top_card.suit:
-            logger.error("Can't call this as trump, it was turned over!")
+            logger.error("Can't call this as trump, top card was turned over!")
             raise
         else:
             hand.trump = trump
