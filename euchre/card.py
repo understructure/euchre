@@ -10,11 +10,11 @@ _r = Rank()
 
 class Card:
     def __init__(self, card_rank, card_suit):
-        self.rank = card_rank
+        self.rank = str(card_rank)
         self.suit = card_suit
         self.suit_symbol = _s.symbols[card_suit]
         self.suit_name = _s.names[card_suit]
-        self.rank_name = _r.names[card_rank]
+        self.rank_name = _r.names[self.rank]
 
     def __str__(self):
         return self.rank_name + " of " + self.suit_name
