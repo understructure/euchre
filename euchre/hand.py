@@ -55,6 +55,8 @@ class Hand:
         self.phase = "bidding"  # [bidding | discarding | playing | screwing]
         self.rotate_active_player()
         self._bidding_team = None
+        self.winning_team = None
+        self.winning_points = 0
 
     @property
     def bidding_team(self):
@@ -118,7 +120,6 @@ class Hand:
                 if not alone:
                     self.players = self.players_original_order
                     self.rotate_active_player()
-                    self.tricks.append(Trick(players=self.players))
                     self.phase = "playing"
                 else:
                     raise NotImplementedError("Need to implment going alone")
@@ -128,17 +129,18 @@ class Hand:
             raise BidException("Invalid action: {}".format(action))
 
     def score(self):
-        num_tricks = len(self.tricks)
-        if num_tricks == 5:
-            lst_trick_scores = [t.score for t in self.tricks]
-            result = dict(functools.reduce(operator.add,
-                                           map(collections.Counter, lst_trick_scores)))
-            hand_scores = self.game.get_scores()
-            num_winner_tricks = max(hand_scores.values())
-            winning_team = [k for k in hand_scores.keys()
-                            if hand_scores[k] == num_winner_tricks][0]
-            if self.bidding_team == winning_team:
-                if 3 <= num_winner_tricks <= 4:
+        team_scores = {t: 0 for t in self.teams}
+        for trick in self.tricks:
+            if trick.winner in self.teams[0].players:
+                team_scores[self.teams[0]] += 1
+            else:
+                team_scores[self.teams[1]] += 1
+        self.winning_team = max(team_scores.items(), key=operator.itemgetter(1))[0]
+
+        # this should be dynamic
+        if len(self.tricks) == 5:
+            if self.bidding_team == self.winning_team:
+                if 3 <= team_scores[self.winning_team] <= 4:
                     # 1 point to bidding team
                     points = 1
                 elif not self.bid_alone:
@@ -150,6 +152,7 @@ class Hand:
             else:
                 # euch'd! 2 points to non-bidding team
                 points = 2
+            self.winning_points = points
         else:
             print("Can't score hand yet, only {} trick(s) of 5 played".format(num_tricks))
 

@@ -1,8 +1,9 @@
 
 
 class Team:
-    def __init__(self, players):
+    def __init__(self, players, id):
         self.players = players
+        self.id = id
         self.score = 0
 
     @property
