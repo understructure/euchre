@@ -20,10 +20,10 @@ def hand_fixture():
 
 @pytest.fixture()
 def random_game_start():
-    p1 = Player(name="Maashu", player_id=1)
-    p2 = Player(name="Nancy", player_id=2)
-    p3 = Player(name="Orin", player_id=3)
-    p4 = Player(name="Penelope", player_id=4)
+    p1 = Player(name="Maashu", player_id=0)
+    p2 = Player(name="Nancy", player_id=1)
+    p3 = Player(name="Orin", player_id=2)
+    p4 = Player(name="Penelope", player_id=3)
 
     t1 = Team(players=[p1, p3])
     t2 = Team(players=[p2, p4])

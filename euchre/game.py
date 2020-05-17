@@ -1,5 +1,5 @@
 """
-Keeps track of the game, may be called a rubber eventually?
+Keeps track of game state, may be called a rubber eventually?
 """
 import random
 
@@ -14,7 +14,6 @@ class Game:
         self.play_to_points = points_to_win
         # whatever number is selected will rotate to the next
         # value in sequence when new game is started
-        self.first_dealer = random.choice(seq=range(4))
         self.players = self.set_players_order()
         self.deal_style = [2, 3, 2, 3]
         self.low_rank = "9"
@@ -36,12 +35,17 @@ class Game:
         return len(self.hands)
 
     def set_players_order(self):
-        temp = []
-        # assumes teams are same length
-        for i in range(len(self.teams)):
-            for j in range(len(self.teams[i].players)):
-                temp.append(self.teams[j].players[i])
-        return temp[self.first_dealer:] + temp[:self.first_dealer]
+        deal_team = random.choice(range(2))
+        other_team = abs(deal_team - 1)
+        deal_player = random.choice(range(2))
+        other_player = abs(deal_player - 1)
+        ordered_players = [
+            self.teams[deal_team].players[deal_player],
+            self.teams[other_team].players[deal_player],
+            self.teams[deal_team].players[other_player],
+            self.teams[other_team].players[other_player]
+        ]
+        return ordered_players
 
     def get_scores(self):
         return {x: self.teams[x].score
