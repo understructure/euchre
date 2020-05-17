@@ -16,9 +16,15 @@ a side is said to be "at the bridge" when it has scored
 """
 import collections, functools, operator
 
+from euchre.suit import Suit
+suit = Suit()
+from euchre.trick import Trick
+
+class BidException(BaseException):
+    pass
 
 class Hand:
-    def __init__(self, players, deal_style, deck):
+    def __init__(self, players, teams, deal_style, deck):
         """
         Creates a Hand object that keeps track of trump,
         what's been played, and by whom.  List of players
@@ -32,6 +38,8 @@ class Hand:
                 (e.g., low card, joker added)
         """
         self.players = players
+        self.teams = teams
+        self.players_original_order = players
         self.dealer = players[0]
         self.deck = deck
         self.trump = None
@@ -41,20 +49,23 @@ class Hand:
         self.top_card = None
         self.top_card_turned_over = False
         self.tricks = []
-        self.num_players = 4  # change to 3 when going alone
-        self.deal()
-        self.phase = "bidding"  # [bidding | playing | screwing]
-        self.current_player_num = None
-        self.current_player = None
-        self.set_current_player_num(num=1)
+        self.num_players = len(self.players)  # change to 3 when going alone
+        self.deal() # also sets self.top_card
+        self.possible_trump = self.top_card.suit
+        self.phase = "bidding"  # [bidding | discarding | playing | screwing]
+        self.rotate_active_player()
+        self._bidding_team = None
 
     @property
     def bidding_team(self):
-        return
+        return self._bidding_team
 
-    def set_current_player_num(self, num):
-        self.current_player_num = num
-        self.current_player = self.players[num]
+    @bidding_team.setter
+    def bidding_team(self, value):
+        self._bidding_team = value
+
+    def rotate_active_player(self):
+        self.players = self.players[1:] + self.players[:1]
 
     def set_trump(self, suit):
         """
@@ -86,6 +97,36 @@ class Hand:
         partner_id = self.game.partner[player_id]
         self.players.remove(partner_id)
 
+    def bid(self, player, action, trump=None, alone=False):
+        if action == "pass":
+            if player == self.dealer:
+                if not self.top_card_turned_over:
+                    self.top_card_turned_over = True
+                    self.possible_trump = [x for x in suit.names.keys() if self.top_card.suit != x]
+                else:
+                    raise BidException("Screw the dealer, you must bid!".format(trump))
+            self.rotate_active_player()
+        elif action == "pick_it_up":
+            self.phase = "discarding"
+            # this is ok as top card isn't in the deck
+            self.dealer.cards += self.top_card
+            self.bidding_team = [x for x in self.teams if player in x][0]
+
+        elif action == "set_trump":
+            if trump in self.possible_trump:
+                self.trump = trump
+                if not alone:
+                    self.players = self.players_original_order
+                    self.rotate_active_player()
+                    self.tricks.append(Trick(players=self.players))
+                    self.phase = "playing"
+                else:
+                    raise NotImplementedError("Need to implment going alone")
+            else:
+                raise BidException("Can't set trump to {}!".format(trump))
+        else:
+            raise BidException("Invalid action: {}".format(action))
+
     def score(self):
         num_tricks = len(self.tricks)
         if num_tricks == 5:
@@ -112,20 +153,10 @@ class Hand:
         else:
             print("Can't score hand yet, only {} trick(s) of 5 played".format(num_tricks))
 
-    def rotate_active_player(self):
-        """
-        Sets current_player object and current_player_num
-        Advances from 0 to 3 and then resets to 0
-        :return:
-        """
-        next_player_num = self.current_player_num + 1 \
-            if self.current_player_num < len(self.players) - 1 \
-            else 0
-        self.set_current_player_num(num=next_player_num)
-
     def start_play(self):
         """
-        dealer is always first player in list
+        dealer is always first player in list, may have to change this
+        for going alone?
         :return:
         """
         self.current_player = self.players[1]

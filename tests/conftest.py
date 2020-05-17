@@ -32,8 +32,9 @@ def random_game_start():
     return g
 
 
-def player_fixture(player_id):
-    player = Player(name="Player {}".format(id), player_id=player_id)
+@pytest.fixture()
+def player_fixture(player_id=99):
+    player = Player(name="Player {}".format(player_id), player_id=player_id)
     return player
 
 
@@ -41,3 +42,22 @@ def player_fixture(player_id):
 def suit_fixture():
     suit = Suit()
     return suit
+
+
+# Game has players
+# players have cards
+# game has hands
+# hands have tricks
+# hand = 5 tricks
+# Player playing card = remove card from hand, add card to trick
+
+# Game state:
+    # Dealer
+    # teams
+    # who's turn
+    # hand original dealer
+    # trick current dealer
+    # Trump
+    # current hand
+    # hand status (active vs. over)
+    # score

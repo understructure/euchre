@@ -55,6 +55,7 @@ class Game:
         deck = Deck(low_rank=self.low_rank)
         self.rotate_dealer()
         self.hands.append(Hand(players=self.players,
+                               teams=self.teams,
                                deal_style=self.deal_style,
                                deck=deck))
 

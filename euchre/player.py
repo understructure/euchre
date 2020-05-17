@@ -6,10 +6,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class PlayerDoesNotHaveCardInHandError:
-    pass
-
-
 class Player:
     def __init__(self, name, player_id):
         self.name = name
@@ -17,13 +13,26 @@ class Player:
         self.cards = []
         self.dealer = False
 
+    def __repr__(self):
+        return "Player ID: {}, name: {}".format(self.id, self.name)
+
     def remove_card(self, card):
         try:
             idx = self.cards.index(card)
             rez = self.cards.pop(idx)
             return rez
-        except PlayerDoesNotHaveCardInHandError:
+        except ValueError:
+            logger.error("{} is not in player's hand".format(card))
             raise
+
+    def bid_action2(self, action):
+        if action == "pass":
+            rez = "pass"
+        elif action == "call_it_up":
+            rez = self.call_it_up(hand=hand, **kwargs)
+        elif action == "screw_the_dealer":
+            pass
+        return rez
 
     def bid_action(self, hand, action, **kwargs):
         if action == "pass":
