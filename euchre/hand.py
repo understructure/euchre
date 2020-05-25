@@ -120,7 +120,8 @@ class Hand:
                 self.trump = trump
                 print("Trump successfully set as {} for this hand".format(self.trump))
                 self.bidding_team = player.team
-                print("Bidding team: {}".format(self.bidding_team))
+                partner_name = [x for x in self.players if x.team == player.team and x != player][0]
+                print("Bidding team: {} (players {} and {})".format(self.bidding_team, player.name, partner_name))
                 if not alone:
                     self.players = self.players_original_order
                     self.rotate_active_player()
@@ -157,11 +158,11 @@ class Hand:
         else:
             print("Can't score hand yet, only {} trick(s) of 5 played".format(num_tricks))
 
-    def start_play(self):
-        """
-        dealer is always first player in list, may have to change this
-        for going alone?
-        :return:
-        """
-        self.current_player = self.players[1]
-        self.phase = "playing"
+    # def start_play(self):
+    #     """
+    #     dealer is always first player in list, may have to change this
+    #     for going alone?
+    #     :return:
+    #     """
+    #     self.current_player = self.players[1]
+    #     self.phase = "playing"

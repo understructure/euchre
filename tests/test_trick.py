@@ -8,7 +8,7 @@ from euchre.team import Team
 from euchre.hand import BidException
 
 
-def test_fully_played_hand_actually():
+def test_fully_played_game_screw_dealer():
     # setup game
     team1 = Team(1)
     team2 = Team(2)
@@ -17,16 +17,12 @@ def test_fully_played_hand_actually():
     p3 = Player("C", 3, team1)
     p4 = Player("D", 4, team2)
 
-    teamz =[team1, team2]
-    # game comes with empty hand
     g = Game(players=[p1, p2, p3, p4], points_to_win=10)
 
     while not g.is_over:
+        # game starts with no hands
         g.new_hand()
-        print("Hand number: {}".format(len(g.hands)))
-        print("Scores: ")
-        print(g.get_scores())
-        # setup bidding - simulate screw the dealer
+        print("=" * 50, "Hand number: {}".format(len(g.hands)), "=" * 50)
         the_hand = g.hands[-1]
         the_hand.bid(g.hands[-1].players[0], "pass")
         the_hand.bid(g.hands[-1].players[0], "pass")
@@ -53,28 +49,21 @@ def test_fully_played_hand_actually():
             if i > 0:
                 trick.set_order_by_last_winner()
             _test_trick(trick, g)
-        print("=" * 50, "Scoring trick", "=" * 50)
+        print("=" * 50, "Scoring hand {}".format(len(g.hands)), "=" * 50)
         the_hand.score()
 
 
 def _test_trick(trick, game):
     the_hand = game.hands[-1]
     for p in the_hand.players:
-        trick.add_card(p.cards[0], p)
+        if p != the_hand.players[0]:
+            playable_cards = p.get_playable_cards(led_card=trick.led_card, trump=the_hand.trump)
+        else:
+            playable_cards = p.cards
+        play_card = random.choice(playable_cards)
+        trick.add_card(play_card, p)
 
     trick.score()
     the_hand.tricks.append(trick)
-    # print("Trick trump: {}".format(bid_suit))
-    print("Trick cards: {}".format(game.hands[-1].tricks[-1].cards))
-    print("Trick players: {}".format(game.hands[-1].tricks[-1].players))
-    print("Trick winner ID: {}".format(game.hands[-1].tricks[-1].winner))
-
-# for i in range(0, 5):
-#     trick = Trick(players=g.hands[-1].players)
-#     test_trick(trick, g.hands[-1].tricks, g.hands[-1].players)
-#
-# # print([x.winner for x in g.hands[-1].tricks])
-# g.hands[-1].score()
-# print("Team {} got {} points".format(g.hands[-1].winning_team.id, g.hands[-1].winning_points))
-# print(len(g.hands))
-# # print([(h.winning_team.id, h.winning_points) for h in g.hands])
+    print([x for x in zip(game.hands[-1].tricks[-1].players, game.hands[-1].tricks[-1].cards)])
+    print("Trick winner: {}".format(game.hands[-1].tricks[-1].winner))

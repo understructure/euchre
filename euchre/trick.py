@@ -1,7 +1,9 @@
 """
 Represents each player playing a card
 """
+from logging import getLogger
 
+logger = getLogger(__name__)
 
 class TrickFullError:
     pass
@@ -51,7 +53,7 @@ class Trick:
                 ranked = 99
             trick_values.append(ranked)
         min_trick_val = min(trick_values)
-        print("min trick val: {}".format(min_trick_val))
+        logger.debug("min trick val: {}".format(min_trick_val))
         self.winner = self.players[trick_values.index(min_trick_val)]
 
     def set_order_by_last_winner(self):

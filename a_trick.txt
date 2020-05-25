@@ -1,0 +1,159 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.8.1, pytest-5.4.1, py-1.8.1, pluggy-0.13.1
+rootdir: /Users/maashu/PycharmProjects/euchre
+collected 1 item
+
+tests/test_trick.py SCORES: {Team 1: 0, Team 2: 0}
+================================================== Hand number: 1 ==================================================
+Trump successfully set as D for this hand
+Bidding team: Team 1 (players A and Player C)
+[(Player B, 10♦), (Player C, J♦), (Player D, A♦), (Player A, J♣)]
+Trick winner: Player C
+[(Player C, 9♦), (Player D, A♠), (Player A, 10♥), (Player B, 9♥)]
+Trick winner: Player C
+[(Player C, 10♣), (Player D, 9♠), (Player A, K♠), (Player B, 9♣)]
+Trick winner: Player C
+[(Player C, K♦), (Player D, Q♥), (Player A, A♥), (Player B, A♣)]
+Trick winner: Player C
+[(Player C, Q♣), (Player D, Q♠), (Player A, 10♠), (Player B, K♥)]
+Trick winner: Player C
+================================================== Scoring hand 1 ==================================================
+SCORES: {Team 1: 2, Team 2: 0}
+================================================== Hand number: 2 ==================================================
+Trump successfully set as H for this hand
+Bidding team: Team 2 (players B and Player D)
+[(Player C, 10♠), (Player D, 9♠), (Player A, K♠), (Player B, Q♠)]
+Trick winner: Player A
+[(Player A, 9♣), (Player B, J♦), (Player C, J♣), (Player D, A♥)]
+Trick winner: Player B
+[(Player B, J♥), (Player C, K♥), (Player D, 9♦), (Player A, 10♦)]
+Trick winner: Player B
+[(Player B, 9♥), (Player C, Q♥), (Player D, K♣), (Player A, A♣)]
+Trick winner: Player C
+[(Player C, A♦), (Player D, Q♣), (Player A, Q♦), (Player B, K♦)]
+Trick winner: Player C
+================================================== Scoring hand 2 ==================================================
+SCORES: {Team 1: 4, Team 2: 0}
+================================================== Hand number: 3 ==================================================
+Trump successfully set as D for this hand
+Bidding team: Team 1 (players C and Player A)
+[(Player D, 10♣), (Player A, A♣), (Player B, 10♠), (Player C, 9♦)]
+Trick winner: Player C
+[(Player C, K♥), (Player D, Q♥), (Player A, 9♠), (Player B, Q♦)]
+Trick winner: Player B
+[(Player B, A♠), (Player C, Q♠), (Player D, J♥), (Player A, K♦)]
+Trick winner: Player D
+[(Player D, A♥), (Player A, 9♥), (Player B, A♦), (Player C, 9♣)]
+Trick winner: Player B
+[(Player B, J♠), (Player C, Q♣), (Player D, J♦), (Player A, K♣)]
+Trick winner: Player D
+================================================== Scoring hand 3 ==================================================
+SCORES: {Team 1: 4, Team 2: 2}
+================================================== Hand number: 4 ==================================================
+Trump successfully set as S for this hand
+Bidding team: Team 2 (players D and Player B)
+[(Player A, Q♠), (Player B, 9♠), (Player C, A♠), (Player D, 10♠)]
+Trick winner: Player C
+[(Player C, Q♦), (Player D, A♦), (Player A, J♦), (Player B, 9♦)]
+Trick winner: Player D
+[(Player D, 10♦), (Player A, K♦), (Player B, 10♥), (Player C, 10♣)]
+Trick winner: Player A
+[(Player A, Q♥), (Player B, A♥), (Player C, K♠), (Player D, K♣)]
+Trick winner: Player C
+[(Player C, J♠), (Player D, A♣), (Player A, J♥), (Player B, Q♣)]
+Trick winner: Player C
+================================================== Scoring hand 4 ==================================================
+SCORES: {Team 1: 6, Team 2: 2}
+================================================== Hand number: 5 ==================================================
+Trump successfully set as S for this hand
+Bidding team: Team 1 (players A and Player C)
+[(Player B, K♠), (Player C, J♥), (Player D, A♦), (Player A, A♠)]
+Trick winner: Player A
+[(Player A, 10♠), (Player B, 9♣), (Player C, A♥), (Player D, J♠)]
+Trick winner: Player D
+[(Player D, J♣), (Player A, 10♦), (Player B, 9♦), (Player C, Q♠)]
+Trick winner: Player D
+[(Player D, K♥), (Player A, 10♣), (Player B, K♣), (Player C, 9♥)]
+Trick winner: Player D
+[(Player D, A♣), (Player A, Q♦), (Player B, K♦), (Player C, Q♣)]
+Trick winner: Player D
+================================================== Scoring hand 5 ==================================================
+SCORES: {Team 1: 6, Team 2: 4}
+================================================== Hand number: 6 ==================================================
+Trump successfully set as D for this hand
+Bidding team: Team 2 (players B and Player D)
+[(Player C, 9♦), (Player D, K♦), (Player A, J♥), (Player B, 10♦)]
+Trick winner: Player A
+[(Player A, J♠), (Player B, 10♠), (Player C, K♣), (Player D, J♦)]
+Trick winner: Player D
+[(Player D, A♠), (Player A, K♥), (Player B, Q♣), (Player C, Q♠)]
+Trick winner: Player D
+[(Player D, A♥), (Player A, 10♥), (Player B, Q♥), (Player C, 9♠)]
+Trick winner: Player D
+[(Player D, 9♣), (Player A, 9♥), (Player B, J♣), (Player C, 10♣)]
+Trick winner: Player B
+================================================== Scoring hand 6 ==================================================
+SCORES: {Team 1: 6, Team 2: 5}
+================================================== Hand number: 7 ==================================================
+Trump successfully set as H for this hand
+Bidding team: Team 1 (players C and Player A)
+[(Player D, 10♦), (Player A, K♥), (Player B, Q♥), (Player C, 10♥)]
+Trick winner: Player A
+[(Player A, J♦), (Player B, K♦), (Player C, Q♦), (Player D, 9♦)]
+Trick winner: Player A
+[(Player A, 9♥), (Player B, K♠), (Player C, J♣), (Player D, 9♣)]
+Trick winner: Player A
+[(Player A, A♥), (Player B, K♣), (Player C, 10♣), (Player D, A♦)]
+Trick winner: Player A
+[(Player A, A♠), (Player B, 10♠), (Player C, J♠), (Player D, Q♣)]
+Trick winner: Player A
+================================================== Scoring hand 7 ==================================================
+SCORES: {Team 1: 8, Team 2: 5}
+================================================== Hand number: 8 ==================================================
+Trump successfully set as C for this hand
+Bidding team: Team 2 (players D and Player B)
+[(Player A, Q♣), (Player B, K♣), (Player C, 9♣), (Player D, A♥)]
+Trick winner: Player B
+[(Player B, 10♣), (Player C, A♣), (Player D, J♣), (Player A, K♦)]
+Trick winner: Player D
+[(Player D, K♠), (Player A, 9♠), (Player B, A♠), (Player C, J♥)]
+Trick winner: Player B
+[(Player B, J♦), (Player C, 9♦), (Player D, Q♠), (Player A, 10♦)]
+Trick winner: Player B
+[(Player B, Q♦), (Player C, Q♥), (Player D, 10♥), (Player A, K♥)]
+Trick winner: Player B
+================================================== Scoring hand 8 ==================================================
+SCORES: {Team 1: 8, Team 2: 7}
+================================================== Hand number: 9 ==================================================
+Trump successfully set as H for this hand
+Bidding team: Team 1 (players A and Player C)
+[(Player B, 10♠), (Player C, K♣), (Player D, 10♥), (Player A, 9♥)]
+Trick winner: Player D
+[(Player D, A♦), (Player A, A♥), (Player B, K♥), (Player C, 10♦)]
+Trick winner: Player A
+[(Player A, Q♦), (Player B, 9♣), (Player C, K♦), (Player D, 10♣)]
+Trick winner: Player C
+[(Player C, Q♥), (Player D, J♥), (Player A, Q♠), (Player B, 9♠)]
+Trick winner: Player D
+[(Player D, 9♦), (Player A, J♣), (Player B, K♠), (Player C, Q♣)]
+Trick winner: Player D
+================================================== Scoring hand 9 ==================================================
+SCORES: {Team 1: 8, Team 2: 9}
+================================================== Hand number: 10 ==================================================
+Trump successfully set as S for this hand
+Bidding team: Team 2 (players B and Player D)
+[(Player C, J♣), (Player D, A♠), (Player A, 10♠), (Player B, K♠)]
+Trick winner: Player C
+[(Player C, J♦), (Player D, A♦), (Player A, Q♦), (Player B, K♣)]
+Trick winner: Player D
+[(Player D, J♠), (Player A, 10♣), (Player B, Q♥), (Player C, Q♠)]
+Trick winner: Player D
+[(Player D, 9♠), (Player A, A♣), (Player B, 9♣), (Player C, J♥)]
+Trick winner: Player D
+[(Player D, K♦), (Player A, A♥), (Player B, 9♥), (Player C, K♥)]
+Trick winner: Player D
+================================================== Scoring hand 10 ==================================================
+SCORES: {Team 1: 8, Team 2: 10}
+.
+
+============================== 1 passed in 0.02s ===============================

@@ -18,7 +18,8 @@ class Player:
         self.team = team
 
     def __repr__(self):
-        return "Player ID: {}, name: {}".format(self.id, self.name)
+        # return "Player ID: {}, name: {}".format(self.id, self.name)
+        return "Player {}".format(self.name)
 
     def get_playable_cards(self, led_card, trump):
         led_suit = _suit.effective_suit(led_card, trump)
@@ -30,9 +31,10 @@ class Player:
             return self.cards
         elif trump == led_suit:
             # led_in_hand and trump_in_hand will be the same, just return one
-            return trump_in_hand
+            # return all cards if no trump in hand
+            return trump_in_hand or self.cards
         else:
-            return trump_in_hand + led_in_hand
+            return trump_in_hand + led_in_hand or self.cards
 
     def remove_card(self, card):
         try:
