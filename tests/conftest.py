@@ -23,6 +23,18 @@ def hand_fixture():
 
 
 @pytest.fixture()
+def setup_game():
+    team1 = Team(1)
+    team2 = Team(2)
+    p1 = Player("A", 1, team1)
+    p2 = Player("B", 2, team2)
+    p3 = Player("C", 3, team1)
+    p4 = Player("D", 4, team2)
+    g = Game(players=[p1, p2, p3, p4], points_to_win=10)
+    return g
+
+
+@pytest.fixture()
 def random_game_start():
     t1 = Team(1)
     t2 = Team(2)

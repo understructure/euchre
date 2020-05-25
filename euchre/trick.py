@@ -5,11 +5,12 @@ from logging import getLogger
 
 logger = getLogger(__name__)
 
-class TrickFullError:
+
+class TrickFullError(Exception):
     pass
 
 
-class TrickNotScorableYetError:
+class TrickNotScorableYetError(Exception):
     pass
 
 
@@ -62,4 +63,5 @@ class Trick:
             winner_idx = self.players.index(p_winner)
             self.players = self.players[winner_idx:] + self.players[:winner_idx]
         else:
-            print("First trick in hand, can't set order by last winner")
+            logger.error("First trick in hand, can't set order by last winner")
+            raise ValueError

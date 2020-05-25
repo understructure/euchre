@@ -12,15 +12,15 @@ def test_hand(hand_fixture):
 
 
 @pytest.mark.xfail(throws=ValueError)
-def test_set_trump(hand_fixture):
+def test_set_bad_trump_fail(hand_fixture):
     hand_fixture.set_trump(suit="X")
 
 
-def test_set_trump2(hand_fixture, suit_fixture, player_fixture):
+def test_set_trump(hand_fixture, suit_fixture):
     suit = Suit()
     for sx in list(suit.names.keys()):
         if sx in hand_fixture.possible_trump:
-            hand_fixture.bid(action="set_trump", player=player_fixture, trump=sx, alone=False)
+            hand_fixture.bid(action="set_trump", player=hand_fixture.players[0], trump=sx, alone=False)
             # hand_fixture.set_trump(suit=sx)
         else:
             print("Can't bid {}, not in possible trump for hand".format(sx))

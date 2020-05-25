@@ -24,9 +24,3 @@ class Card:
 
     def __eq__(self, other):
         return self.__repr__() == other.__repr__()
-
-
-# class CardHandTrick(Card):
-#     def __init__(self, card, hand, trick):
-#         trick.led_suit
-#         hand.trump

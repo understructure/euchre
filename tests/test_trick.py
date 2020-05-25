@@ -1,23 +1,38 @@
 import pytest
 import random
 
-from euchre.game import Game
-from euchre.trick import Trick
-from euchre.player import Player
-from euchre.team import Team
+from euchre.trick import Trick, TrickFullError, TrickNotScorableYetError
 from euchre.hand import BidException
 
 
-def test_fully_played_game_screw_dealer():
-    # setup game
-    team1 = Team(1)
-    team2 = Team(2)
-    p1 = Player("A", 1, team1)
-    p2 = Player("B", 2, team2)
-    p3 = Player("C", 3, team1)
-    p4 = Player("D", 4, team2)
+@pytest.mark.xfail(raises=TrickFullError)
+def test_trick_full(hand_fixture):
+    t = Trick(hand=hand_fixture)
+    t.add_card(card=hand_fixture.players[0].cards[0], player=hand_fixture.players[0])
+    t.add_card(card=hand_fixture.players[1].cards[0], player=hand_fixture.players[1])
+    t.add_card(card=hand_fixture.players[2].cards[0], player=hand_fixture.players[2])
+    t.add_card(card=hand_fixture.players[3].cards[0], player=hand_fixture.players[3])
+    t.add_card(card=hand_fixture.players[0].cards[1], player=hand_fixture.players[0])
 
-    g = Game(players=[p1, p2, p3, p4], points_to_win=10)
+
+@pytest.mark.xfail(raises=ValueError)
+def test_set_order_by_last_winner(hand_fixture):
+    t = Trick(hand=hand_fixture)
+    t.set_order_by_last_winner()
+
+
+@pytest.mark.xfail(raises=TrickNotScorableYetError)
+def test_score_cards_less_than_players_fail(hand_fixture):
+    assert len(hand_fixture.players) == 4
+    t = Trick(hand=hand_fixture)
+    t.add_card(card=hand_fixture.players[0].cards[0], player=hand_fixture.players[0])
+    t.add_card(card=hand_fixture.players[1].cards[0], player=hand_fixture.players[1])
+    t.add_card(card=hand_fixture.players[2].cards[0], player=hand_fixture.players[2])
+    t.score()
+
+
+def test_fully_played_game_screw_dealer(setup_game):
+    g = setup_game
 
     while not g.is_over:
         # game starts with no hands

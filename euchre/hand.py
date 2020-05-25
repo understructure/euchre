@@ -14,14 +14,18 @@ as agreed beforehand, wins the game. In the 5-point game,
 a side is said to be "at the bridge" when it has scored
 4 and the opponents have scored 2 or less.
 """
-import collections, functools, operator
+import logging
+import operator
+# import collections, functools,
+
+logger = logging.getLogger("euchre")
 
 from euchre.suit import Suit
 suit = Suit()
-from euchre.trick import Trick
 
 class BidException(BaseException):
     pass
+
 
 class Hand:
     def __init__(self, players, teams, deal_style, deck):
@@ -41,6 +45,7 @@ class Hand:
         self.teams = teams
         self.players_original_order = players
         self.dealer = players[0]
+        self.bids = []
         self.deck = deck
         self.trump = None
         self.bid_alone = False
@@ -49,14 +54,23 @@ class Hand:
         self.top_card = None
         self.top_card_turned_over = False
         self.tricks = []
-        self.num_players = len(self.players)  # change to 3 when going alone
         self.deal() # also sets self.top_card
-        self.possible_trump = self.top_card.suit
         self.phase = "bidding"  # [bidding | discarding | playing | screwing]
         self.rotate_active_player()
         self._bidding_team = None
         self.winning_team = None
         self.winning_points = 0
+
+    @property
+    def possible_trump(self):
+        if self.top_card_turned_over:
+            return [x for x in list(suit.names.keys()) if x != self.top_card.suit]
+        else:
+            return [self.top_card.suit]
+
+    @property
+    def num_players(self):
+        return len(self.players)
 
     @property
     def bidding_team(self):
@@ -69,21 +83,6 @@ class Hand:
     def rotate_active_player(self):
         self.players = self.players[1:] + self.players[:1]
 
-    # def set_trump(self, suit):
-    #     """
-    #     Sets trump for the hand.  Can't set it to be None.
-    #     :param suit: char - S, H, D, C
-    #     :return:
-    #     """
-    #     if self.trump is None:
-    #         if suit in self.deck.suits:
-    #             self.trump = suit
-    #             print("Trump successfully set as {} for this hand".format(self.trump))
-    #         else:
-    #             raise ValueError("{} not a valid suit, trump not set".format(suit))
-    #     else:
-    #         print("Trump already set as {} for this hand".format(self.trump))
-
     def deal(self):
         for _ in range(2):
             # for player in range(len(self.players)):
@@ -94,53 +93,53 @@ class Hand:
             self.style.reverse()
         self.top_card = self.deck.cards.pop(0)
 
-    def set_bid_alone(self, player_id):
-        self.bid_alone = True
-        self.num_players = 3
-        partner_id = self.game.partner[player_id]
-        self.players.remove(partner_id)
-
     def bid(self, player, action, trump=None, alone=False):
         if action == "pass":
             if player == self.dealer:
                 if not self.top_card_turned_over:
                     self.top_card_turned_over = True
-                    self.possible_trump = [x for x in suit.names.keys() if self.top_card.suit != x]
                 else:
                     raise BidException("Screw the dealer, you must bid!".format(trump))
             self.rotate_active_player()
         elif action == "pick_it_up":
-            self.phase = "discarding"
-            # this is ok as top card isn't in the deck
-            self.dealer.cards += self.top_card
-            self.bidding_team = [x for x in self.teams if player in x][0]
-
+            if not self.top_card_turned_over:
+                self.phase = "discarding"
+                # this is ok as top card isn't in the deck
+                self.dealer.cards += self.top_card
+                self.bidding_team = [x for x in self.teams if player in x][0]
+            else:
+                raise BidException("Can't call it up once top card has been turned over!")
         elif action == "set_trump":
             if trump in self.possible_trump:
                 self.trump = trump
-                print("Trump successfully set as {} for this hand".format(self.trump))
+                logger.debug("Trump successfully set as {} for this hand".format(self.trump))
                 self.bidding_team = player.team
-                partner_name = [x for x in self.players if x.team == player.team and x != player][0]
-                print("Bidding team: {} (players {} and {})".format(self.bidding_team, player.name, partner_name))
+                assert player in self.players
+                partner_name = [x.name for x in self.players if x.team == player.team and x != player][0]
+                logger.info("Bidding team: {} (players {} and {})".format(self.bidding_team, player.name, partner_name))
                 if not alone:
                     self.players = self.players_original_order
-                    self.rotate_active_player()
-                    self.phase = "playing"
                 else:
-                    raise NotImplementedError("Need to implment going alone")
+                    self.bid_alone = True
+                    partner = [x for x in self.players if x.team == player.team and x != player]
+                    self.players.remove(partner)
+                self.rotate_active_player()
+                self.phase = "playing"
             else:
                 raise BidException("Can't set trump to {}!".format(trump))
         else:
             raise BidException("Invalid action: {}".format(action))
+        self.bids.append({player: {"action": action, "trump": trump, "alone": alone}})
 
     def score(self):
+        num_tricks = len(self.tricks)
         team_scores = {t: 0 for t in self.teams}
         for trick in self.tricks:
             team_scores[trick.winner.team] += 1
         self.winning_team = max(team_scores.items(), key=operator.itemgetter(1))[0]
 
         # this should be dynamic
-        if len(self.tricks) == 5:
+        if num_tricks == 5:
             if self.bidding_team == self.winning_team:
                 if 3 <= team_scores[self.winning_team] <= 4:
                     # 1 point to bidding team
@@ -157,12 +156,3 @@ class Hand:
             self.winning_points = points
         else:
             print("Can't score hand yet, only {} trick(s) of 5 played".format(num_tricks))
-
-    # def start_play(self):
-    #     """
-    #     dealer is always first player in list, may have to change this
-    #     for going alone?
-    #     :return:
-    #     """
-    #     self.current_player = self.players[1]
-    #     self.phase = "playing"

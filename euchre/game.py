@@ -58,8 +58,6 @@ class Game:
             else:
                 print("No winner for hand yet")
         return rez
-        # return {x: self.teams[x].score
-        #         for x in range(len(self.teams))}
 
     def new_hand(self):
         deck = Deck(low_rank=self.low_rank)
@@ -72,14 +70,3 @@ class Game:
     def rotate_dealer(self):
         temp = self.players
         self.players = temp[1:] + temp[:1]
-
-    # def update_score(self):
-    #     # which is the winning team?
-    #     # how many points?
-    #     hand = self.hands[-1]
-    #     hand.score()
-    #     if self.is_over:
-    #         print("Game Over, Team {} wins!".format(winning_team))
-    #         print("Final score, Team {}: {}, Team {}: {}"
-    #               .format(self.game.teams[0], self.game.teams[0].points,
-    #                       self.game.teams[1], self.game.teams[1].points))
