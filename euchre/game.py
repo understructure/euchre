@@ -5,17 +5,17 @@ import random
 
 from euchre.hand import Hand
 from euchre.deck import Deck
-from collections import Counter
+# from collections import Counter
 
 
 class Game:
-    def __init__(self, teams, points_to_win):
+    def __init__(self, players, points_to_win):
         self.hands = []
-        self.teams = teams
+        self.teams = list(set([x.team for x in players]))
         self.play_to_points = points_to_win
         # whatever number is selected will rotate to the next
         # value in sequence when new game is started
-        self.players = self.set_players_order()
+        self.players = self.set_players_order(players)
         self.deal_style = [2, 3, 2, 3]
         self.low_rank = "9"
         # dealer is first in list, person to dealer's right
@@ -36,16 +36,17 @@ class Game:
     def hand_number(self):
         return len(self.hands)
 
-    def set_players_order(self):
-        deal_team = random.choice(range(2))
-        other_team = abs(deal_team - 1)
-        deal_player = random.choice(range(2))
-        other_player = abs(deal_player - 1)
+    def set_players_order(self, players):
+        deal_team = random.choice(self.teams)
+        other_team = [x for x in self.teams if x != deal_team][0]
+        deal_player = random.choice([x for x in players if x.team == deal_team])
+        deal_partner = [x for x in players if x.team == deal_team and x != deal_player][0]
+        other_players = [x for x in players if x.team == other_team]
         ordered_players = [
-            self.teams[deal_team].players[deal_player],
-            self.teams[other_team].players[deal_player],
-            self.teams[deal_team].players[other_player],
-            self.teams[other_team].players[other_player]
+            deal_player,
+            other_players[0],
+            deal_partner,
+            other_players[1]
         ]
         return ordered_players
 

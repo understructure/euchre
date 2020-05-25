@@ -1,6 +1,6 @@
 
 
 class Team:
-    def __init__(self, players, id):
-        self.players = players
+    def __init__(self, id):
+        # self.players = players
         self.id = id

@@ -53,3 +53,11 @@ class Trick:
         min_trick_val = min(trick_values)
         print("min trick val: {}".format(min_trick_val))
         self.winner = self.players[trick_values.index(min_trick_val)]
+
+    def set_order_by_last_winner(self):
+        if len(self.hand.tricks) > 0 and len(self.cards) == 0:
+            p_winner = self.hand.tricks[-1].winner
+            winner_idx = self.players.index(p_winner)
+            self.players = self.players[winner_idx:] + self.players[:winner_idx]
+        else:
+            print("First trick in hand, can't set order by last winner")

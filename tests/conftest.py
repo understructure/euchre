@@ -11,10 +11,12 @@ from euchre.suit import Suit
 @pytest.fixture()
 def hand_fixture():
     deck = Deck()
-    p1 = Player(name="Player 0", player_id=0)
-    p2 = Player(name="Player 1", player_id=1)
-    p3 = Player(name="Player 2", player_id=2)
-    p4 = Player(name="Player 3", player_id=3)
+    t1 = Team(1)
+    t2 = Team(2)
+    p1 = Player(name="Player 0", player_id=0, team=t1)
+    p2 = Player(name="Player 1", player_id=1, team=t2)
+    p3 = Player(name="Player 2", player_id=2, team=t1)
+    p4 = Player(name="Player 3", player_id=3, team=t2)
     t1 = [p1, p3]
     t2 = [p2, p4]
     return Hand(players=[p1, p2, p3, p4], teams=[t1, t2], deal_style=[3, 2, 3, 2], deck=deck)
@@ -22,21 +24,21 @@ def hand_fixture():
 
 @pytest.fixture()
 def random_game_start():
-    p1 = Player(name="Maashu", player_id=0)
-    p2 = Player(name="Nancy", player_id=1)
-    p3 = Player(name="Orin", player_id=2)
-    p4 = Player(name="Penelope", player_id=3)
+    t1 = Team(1)
+    t2 = Team(2)
+    p1 = Player(name="Maashu", player_id=0, team=t1)
+    p2 = Player(name="Nancy", player_id=1, team=t2)
+    p3 = Player(name="Orin", player_id=2, team=t1)
+    p4 = Player(name="Penelope", player_id=3, team=t2)
 
-    t1 = Team(id=1, players=[p1, p3])
-    t2 = Team(id=2, players=[p2, p4])
-
-    g = Game(teams=[t1, t2], points_to_win=10)
+    g = Game(players=[p1, p2, p3, p4], points_to_win=10)
     return g
 
 
 @pytest.fixture()
 def player_fixture(player_id=99):
-    player = Player(name="Player {}".format(player_id), player_id=player_id)
+    t1 = Team(1)
+    player = Player(name="Player {}".format(player_id), player_id=player_id, team=t1)
     return player
 
 

@@ -10,11 +10,12 @@ from euchre.suit import Suit
 _suit = Suit()
 
 class Player:
-    def __init__(self, name, player_id):
+    def __init__(self, name, player_id, team):
         self.name = name
         self.id = player_id
         self.cards = []
         self.dealer = False
+        self.team = team
 
     def __repr__(self):
         return "Player ID: {}, name: {}".format(self.id, self.name)

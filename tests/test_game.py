@@ -38,11 +38,13 @@ def test_players_setup_properly(random_game_start):
     :return:
     """
     game = random_game_start
-    sorted_deal_ids = sorted([game.players[0].id, game.players[2].id])
-    sorted_other_ids = sorted([game.players[1].id, game.players[3].id])
-    assert sorted([sorted_other_ids, sorted_deal_ids]) == \
-           sorted([[x.id for x in game.teams[0].players],
-           sorted([y.id for y in game.teams[1].players])])
+    assert game.players[0].team == game.players[2].team
+    assert game.players[1].team == game.players[3].team
+    # sorted_deal_ids = sorted([game.players[0].id, game.players[2].id])
+    # sorted_other_ids = sorted([game.players[1].id, game.players[3].id])
+    # assert sorted([sorted_other_ids, sorted_deal_ids]) == \
+    #        sorted([[x.id for x in game.teams[0].players],
+    #        sorted([y.id for y in game.teams[1].players])])
 
 
 def test_rotate_dealer(random_game_start):

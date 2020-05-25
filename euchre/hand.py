@@ -119,6 +119,8 @@ class Hand:
             if trump in self.possible_trump:
                 self.trump = trump
                 print("Trump successfully set as {} for this hand".format(self.trump))
+                self.bidding_team = player.team
+                print("Bidding team: {}".format(self.bidding_team))
                 if not alone:
                     self.players = self.players_original_order
                     self.rotate_active_player()
@@ -133,10 +135,7 @@ class Hand:
     def score(self):
         team_scores = {t: 0 for t in self.teams}
         for trick in self.tricks:
-            if trick.winner in self.teams[0].players:
-                team_scores[self.teams[0]] += 1
-            else:
-                team_scores[self.teams[1]] += 1
+            team_scores[trick.winner.team] += 1
         self.winning_team = max(team_scores.items(), key=operator.itemgetter(1))[0]
 
         # this should be dynamic

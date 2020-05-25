@@ -10,17 +10,16 @@ from euchre.hand import BidException
 
 def test_fully_played_hand_actually():
     # setup game
-    p1 = Player("A", 1)
-    p2 = Player("B", 2)
-    p3 = Player("C", 3)
-    p4 = Player("D", 4)
-
-    team1 = Team([p1, p3], id=0)
-    team2 = Team([p2, p4], id=1)
+    team1 = Team(1)
+    team2 = Team(2)
+    p1 = Player("A", 1, team1)
+    p2 = Player("B", 2, team2)
+    p3 = Player("C", 3, team1)
+    p4 = Player("D", 4, team2)
 
     teamz =[team1, team2]
     # game comes with empty hand
-    g = Game(teams=teamz, points_to_win=10)
+    g = Game(players=[p1, p2, p3, p4], points_to_win=10)
 
     while not g.is_over:
         g.new_hand()
@@ -49,8 +48,10 @@ def test_fully_played_hand_actually():
 
         assert len(the_hand.tricks) == 0
 
-        for _ in range(0, 5):
+        for i in range(0, 5):
             trick = Trick(hand=the_hand)
+            if i > 0:
+                trick.set_order_by_last_winner()
             _test_trick(trick, g)
         print("=" * 50, "Scoring trick", "=" * 50)
         the_hand.score()

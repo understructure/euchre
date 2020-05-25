@@ -2,13 +2,15 @@ import pytest
 
 from euchre.card import Card
 from euchre.player import Player
-
+from euchre.team import Team
 
 def test_create_player():
-    p1 = Player(name="Monkeyboy", player_id=1)
+    t1 = Team(id=1)
+    p1 = Player(name="Monkeyboy", player_id=1, team=t1)
     assert p1.id == 1
     assert p1.name == "Monkeyboy"
-    p2 = Player(name="Yoyo", player_id=99)
+    t2 = Team(id=2)
+    p2 = Player(name="Yoyo", player_id=99, team=t2)
     assert p2.name == "Yoyo"
     assert p2.id == 99
     assert p1.cards == []
