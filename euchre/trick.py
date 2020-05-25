@@ -12,9 +12,10 @@ class TrickNotScorableYetError:
 
 
 class Trick:
-    def __init__(self, players):
+    def __init__(self, hand):
         self.cards = []
-        self.players = players
+        self.hand = hand
+        self.players = hand.players
         self.led_suit = None
         self.led_rank = None
         self.led_card = None
@@ -32,10 +33,10 @@ class Trick:
             raise TrickFullError("{} cards in hand and {} cards in trick, time to score it!"
                                  .format(len(self.cards), len(self.players)))
 
-    def score(self, trump, deck):
+    def score(self):
         if len(self.cards) == len(self.players):
             card_ranks_by_trump_and_led = \
-                deck.get_card_ranks_by_trump_and_led(trump, self.led_card)
+                self.hand.deck.get_card_ranks_by_trump_and_led(self.hand.trump, self.led_card)
             self.set_winner(card_ranks_by_trump_and_led)
         else:
             raise TrickNotScorableYetError("Hand only has {} cards, need {} cards to score it"

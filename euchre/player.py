@@ -5,6 +5,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+from euchre.suit import Suit
+
+_suit = Suit()
 
 class Player:
     def __init__(self, name, player_id):
@@ -15,6 +18,20 @@ class Player:
 
     def __repr__(self):
         return "Player ID: {}, name: {}".format(self.id, self.name)
+
+    def get_playable_cards(self, led_card, trump):
+        led_suit = _suit.effective_suit(led_card, trump)
+        led_in_hand = [y for y in self.cards if _suit.effective_suit(y, trump) == led_suit]
+        trump_in_hand = [x for x in self.cards if _suit.effective_suit(x, trump) == trump]
+
+        if not led_in_hand:
+            # can play anything
+            return self.cards
+        elif trump == led_suit:
+            # led_in_hand and trump_in_hand will be the same, just return one
+            return trump_in_hand
+        else:
+            return trump_in_hand + led_in_hand
 
     def remove_card(self, card):
         try:

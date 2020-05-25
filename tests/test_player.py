@@ -22,6 +22,25 @@ def test_remove_card_empty_hand_throws_error(player_fixture):
     p1.remove_card(card=c)
 
 
+def test_get_playable_cards_has_trump(player_fixture):
+    p1 = player_fixture
+    p1.cards = [Card("A", "S"), Card("Q", "D"), Card("J", "D"), Card("9", "H")]
+    led_card = Card("A", "H")
+    trump = "H"
+    playable = p1.get_playable_cards(led_card, trump)
+    assert len(playable) == 2
+    print("Playable cards: {}".format(", ".join([repr(x) for x in playable])))
+
+
+def test_get_playable_cards_no_trump(player_fixture):
+    p1 = player_fixture
+    p1.cards = [Card("A", "S"), Card("Q", "D"), Card("J", "S")]
+    led_card = Card("A", "H")
+    trump = "C"
+    playable = p1.get_playable_cards(led_card, trump)
+    assert len(playable) == 3
+    print("Playable cards: {}".format(", ".join([repr(x) for x in playable])))
+
 def test_bid_action():
     pass
 

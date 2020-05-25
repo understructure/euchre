@@ -69,19 +69,20 @@ class Hand:
     def rotate_active_player(self):
         self.players = self.players[1:] + self.players[:1]
 
-    def set_trump(self, suit):
-        """
-        Sets trump for the hand.  Can't set it to be None.
-        :param suit: char - S, H, D, C
-        :return:
-        """
-        if self.trump is None:
-            if suit in self.deck.suits:
-                self.trump = suit
-            else:
-                print("{} not a valid suit, trump not set".format(suit))
-        else:
-            print("Trump already set as {} for this hand".format(self.trump))
+    # def set_trump(self, suit):
+    #     """
+    #     Sets trump for the hand.  Can't set it to be None.
+    #     :param suit: char - S, H, D, C
+    #     :return:
+    #     """
+    #     if self.trump is None:
+    #         if suit in self.deck.suits:
+    #             self.trump = suit
+    #             print("Trump successfully set as {} for this hand".format(self.trump))
+    #         else:
+    #             raise ValueError("{} not a valid suit, trump not set".format(suit))
+    #     else:
+    #         print("Trump already set as {} for this hand".format(self.trump))
 
     def deal(self):
         for _ in range(2):
@@ -117,6 +118,7 @@ class Hand:
         elif action == "set_trump":
             if trump in self.possible_trump:
                 self.trump = trump
+                print("Trump successfully set as {} for this hand".format(self.trump))
                 if not alone:
                     self.players = self.players_original_order
                     self.rotate_active_player()

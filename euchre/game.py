@@ -5,6 +5,7 @@ import random
 
 from euchre.hand import Hand
 from euchre.deck import Deck
+from collections import Counter
 
 
 class Game:
@@ -17,7 +18,6 @@ class Game:
         self.players = self.set_players_order()
         self.deal_style = [2, 3, 2, 3]
         self.low_rank = "9"
-        self.new_hand()
         # dealer is first in list, person to dealer's right
         # is first person to bid
         self.players[1].current_turn = True
@@ -28,7 +28,9 @@ class Game:
 
     @property
     def is_over(self):
-        return not all(x.score < self.play_to_points for x in self.teams)
+        scores = self.get_scores()
+        print("SCORES: {}".format(str(scores)))
+        return any([x >= self.play_to_points for x in scores.values()])
 
     @property
     def hand_number(self):
@@ -48,8 +50,15 @@ class Game:
         return ordered_players
 
     def get_scores(self):
-        return {x: self.teams[x].score
-                for x in range(len(self.teams))}
+        rez = {t: 0 for t in self.teams}
+        for hand in self.hands:
+            if hand.winning_team:
+                rez[hand.winning_team] += hand.winning_points
+            else:
+                print("No winner for hand yet")
+        return rez
+        # return {x: self.teams[x].score
+        #         for x in range(len(self.teams))}
 
     def new_hand(self):
         deck = Deck(low_rank=self.low_rank)

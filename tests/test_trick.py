@@ -1,4 +1,5 @@
 import pytest
+import random
 
 from euchre.game import Game
 from euchre.trick import Trick
@@ -8,6 +9,7 @@ from euchre.hand import BidException
 
 
 def test_fully_played_hand_actually():
+    # setup game
     p1 = Player("A", 1)
     p2 = Player("B", 2)
     p3 = Player("C", 3)
@@ -17,43 +19,61 @@ def test_fully_played_hand_actually():
     team2 = Team([p2, p4], id=1)
 
     teamz =[team1, team2]
+    # game comes with empty hand
     g = Game(teams=teamz, points_to_win=10)
 
-    g.hands[-1].bid(g.hands[-1].players[0], "pass")
-    g.hands[-1].bid(g.hands[-1].players[0], "pass")
-    g.hands[-1].bid(g.hands[-1].players[0], "pass")
-    g.hands[-1].bid(g.hands[-1].players[0], "pass")
+    while not g.is_over:
+        g.new_hand()
+        print("Hand number: {}".format(len(g.hands)))
+        print("Scores: ")
+        print(g.get_scores())
+        # setup bidding - simulate screw the dealer
+        the_hand = g.hands[-1]
+        the_hand.bid(g.hands[-1].players[0], "pass")
+        the_hand.bid(g.hands[-1].players[0], "pass")
+        the_hand.bid(g.hands[-1].players[0], "pass")
+        the_hand.bid(g.hands[-1].players[0], "pass")
 
-    g.hands[-1].top_card_turned_over == True
+        the_hand.top_card_turned_over = True
 
-    g.hands[-1].bid(g.hands[-1].players[0], "pass")
-    g.hands[-1].bid(g.hands[-1].players[0], "pass")
-    g.hands[-1].bid(g.hands[-1].players[0], "pass")
+        the_hand.bid(g.hands[-1].players[0], "pass")
+        the_hand.bid(g.hands[-1].players[0], "pass")
+        the_hand.bid(g.hands[-1].players[0], "pass")
 
-    # next one should throw screw the dealer
-    with pytest.raises(BidException):
-        g.hands[-1].bid(g.hands[-1].players[0], "pass")
+        # next one should throw screw the dealer
+        with pytest.raises(BidException):
+            the_hand.bid(the_hand.players[0], "pass")
 
-    bid_suit = g.hands[-1].possible_trump[0]
-    g.hands[-1].bid(g.hands[-1].players[0], "set_trump", bid_suit)
+        bid_suit = random.choice(g.hands[-1].possible_trump)
+        the_hand.bid(the_hand.players[0], "set_trump", bid_suit)
 
-    assert len(g.hands[-1].tricks) == 0
-    def test_trick(trick, tricks, players):
-        tricks.append(trick)
+        assert len(the_hand.tricks) == 0
 
-        for p in players:
-            trick.add_card(p.cards[0], p)
+        for _ in range(0, 5):
+            trick = Trick(hand=the_hand)
+            _test_trick(trick, g)
+        print("=" * 50, "Scoring trick", "=" * 50)
+        the_hand.score()
 
-        trick.score(trump=bid_suit, deck=g.hands[-1].deck)
-        print("Trick trump: {}".format(bid_suit))
-        print("Trick cards: {}".format(g.hands[-1].tricks[-1].cards))
-        print("Trick players: {}".format(g.hands[-1].tricks[-1].players))
-        print("Trick winner ID: {}".format(g.hands[-1].tricks[-1].winner))
 
-    for i in range(0, 5):
-        trick = Trick(players=g.hands[-1].players)
-        test_trick(trick, g.hands[-1].tricks, g.hands[-1].players)
+def _test_trick(trick, game):
+    the_hand = game.hands[-1]
+    for p in the_hand.players:
+        trick.add_card(p.cards[0], p)
 
-    print([x.winner for x in g.hands[-1].tricks])
-    g.hands[-1].score()
-    print("Team {} got {} points".format(g.hands[-1].winning_team.id, g.hands[-1].winning_points))
+    trick.score()
+    the_hand.tricks.append(trick)
+    # print("Trick trump: {}".format(bid_suit))
+    print("Trick cards: {}".format(game.hands[-1].tricks[-1].cards))
+    print("Trick players: {}".format(game.hands[-1].tricks[-1].players))
+    print("Trick winner ID: {}".format(game.hands[-1].tricks[-1].winner))
+
+# for i in range(0, 5):
+#     trick = Trick(players=g.hands[-1].players)
+#     test_trick(trick, g.hands[-1].tricks, g.hands[-1].players)
+#
+# # print([x.winner for x in g.hands[-1].tricks])
+# g.hands[-1].score()
+# print("Team {} got {} points".format(g.hands[-1].winning_team.id, g.hands[-1].winning_points))
+# print(len(g.hands))
+# # print([(h.winning_team.id, h.winning_points) for h in g.hands])
