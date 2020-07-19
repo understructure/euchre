@@ -22,3 +22,7 @@ def test_card_valid_suit_pass():
 @pytest.mark.xfail(raises=KeyError)
 def test_card_invalid_suit_fail():
     bad = Card("A", "Q")
+
+@pytest.mark.xfail(raises=KeyError)
+def test_card_invalid_rank_fail():
+    bad = Card("X", "H")

@@ -28,13 +28,25 @@ class Game:
 
     @property
     def is_over(self):
-        scores = self.get_scores()
-        print("SCORES: {}".format(str(scores)))
-        return any([x >= self.play_to_points for x in scores.values()])
+        print("SCORES: {}".format(str(self.scores)))
+        return any([x >= self.play_to_points for x in self.scores.values()])
+        # scores = self.get_scores()
+        # print("SCORES: {}".format(str(scores)))
+        # return any([x >= self.play_to_points for x in scores.values()])
 
     @property
     def hand_number(self):
         return len(self.hands)
+
+    @property
+    def scores(self):
+        rez = {t: 0 for t in self.teams}
+        for hand in self.hands:
+            if hand.winning_team:
+                rez[hand.winning_team] += hand.winning_points
+            else:
+                print("No winner for hand yet")
+        return rez
 
     def set_players_order(self, players):
         deal_team = random.choice(self.teams)
@@ -50,14 +62,14 @@ class Game:
         ]
         return ordered_players
 
-    def get_scores(self):
-        rez = {t: 0 for t in self.teams}
-        for hand in self.hands:
-            if hand.winning_team:
-                rez[hand.winning_team] += hand.winning_points
-            else:
-                print("No winner for hand yet")
-        return rez
+    # def get_scores(self):
+    #     rez = {t: 0 for t in self.teams}
+    #     for hand in self.hands:
+    #         if hand.winning_team:
+    #             rez[hand.winning_team] += hand.winning_points
+    #         else:
+    #             print("No winner for hand yet")
+    #     return rez
 
     def new_hand(self):
         deck = Deck(low_rank=self.low_rank)

@@ -10,7 +10,7 @@ class Rank:
 
     @property
     def natural_ranks(self):
-        return [namez[x] for x in ["A", "K", "Q", "J", "10", "9", "8", "7"]]
+        return [self.names[x] for x in ["A", "K", "Q", "J", "10", "9", "8", "7"]]
 
     @property
     def non_bowers(self):

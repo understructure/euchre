@@ -23,6 +23,7 @@ logger = logging.getLogger("euchre")
 from euchre.suit import Suit
 suit = Suit()
 
+
 class BidException(BaseException):
     pass
 

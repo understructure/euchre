@@ -1,11 +1,13 @@
 import pytest
 
+from euchre.card import Card
 from euchre.team import Team
 from euchre.game import Game
 from euchre.hand import Hand
 from euchre.deck import Deck
 from euchre.player import Player
 from euchre.suit import Suit
+from euchre.trick import Trick
 
 
 @pytest.fixture()
@@ -58,6 +60,31 @@ def player_fixture(player_id=99):
 def suit_fixture():
     suit = Suit()
     return suit
+
+
+@pytest.fixture()
+def trick_team1_wins_fixture(setup_game, hand_fixture):
+    game = setup_game
+    hand_fixture.trump = "S"
+    t = Trick(hand_fixture)
+    t.add_card(Card("J", "S"), game.players[0])
+    t.add_card(Card("J", "C"), game.players[1])
+    t.add_card(Card("A", "S"), game.players[2])
+    t.add_card(Card("K", "S"), game.players[3])
+    return t
+
+
+@pytest.fixture()
+def trick_team2_wins_fixture(setup_game, hand_fixture):
+    game = setup_game
+    hand_fixture.trump = "S"
+    t = Trick(hand_fixture)
+    t.add_card(Card("J", "C"), game.players[0])
+    t.add_card(Card("J", "S"), game.players[1])
+    t.add_card(Card("A", "S"), game.players[2])
+    t.add_card(Card("K", "S"), game.players[3])
+    return t
+
 
 
 # Game has players

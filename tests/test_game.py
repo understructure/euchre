@@ -74,7 +74,7 @@ def test_rotate_dealer(random_game_start):
 
 def test_get_initial_scores(random_game_start):
     game = random_game_start
-    assert game.get_scores() == {x: 0 for x in game.teams}
+    assert game.scores == {x: 0 for x in game.teams}
 
 
 def test_get_hand_number(random_game_start):
@@ -114,4 +114,15 @@ def test_game_add_hand(random_game_start):
     fifth_dealer = game.dealer
     assert first_dealer == fifth_dealer
     # scores never set, hands never played
-    assert game.get_scores() == {x: 0 for x in game.teams}
+    assert game.scores == {x: 0 for x in game.teams}
+
+
+def test_set_players_order(random_game_start):
+    game = random_game_start
+    assert game.players[0].team == game.players[2].team
+    assert game.players[1].team == game.players[3].team
+
+
+def test_game_points_setup_correctly(setup_game):
+    game = setup_game
+    assert list(game.scores.values()) == [0, 0]
