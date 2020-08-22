@@ -1,4 +1,5 @@
-#
+import random
+
 #
 # class Strategy:
 #     def __init__(self):
@@ -24,3 +25,22 @@
 #             top_card_points = 0
 #
 #
+
+
+def bid_strategy(bid_phase, is_dealer, call_prob={"bidding": 0.4, "screwing": 0.5}):
+    try:
+        bid_prob = call_prob[bid_phase]
+        if bid_phase == "screwing" and is_dealer:
+            rez = "call_it"
+        else:
+            x = random.choice(range(100)) / 100.
+            print("Bid probability is {}, random is {}".format(bid_prob, x))
+            if x <= bid_prob:
+                rez = "call_it"
+            else:
+                rez = "pass_it"
+        return rez
+    except ValueError:
+        raise("Unknown bid phase {}".format(bid_phase))
+
+

@@ -55,7 +55,7 @@ class Hand:
         self.top_card = None
         self.top_card_turned_over = False
         self.tricks = []
-        self.deal() # also sets self.top_card
+        self.deal()  # also sets self.top_card
         self.phase = "bidding"  # [bidding | discarding | playing | screwing]
         self.rotate_active_player()
         self._bidding_team = None
@@ -107,6 +107,7 @@ class Hand:
                 self.phase = "discarding"
                 # this is ok as top card isn't in the deck
                 self.dealer.cards += self.top_card
+                self.trump = self.top_card.suit
                 self.bidding_team = [x for x in self.teams if player in x][0]
             else:
                 raise BidException("Can't call it up once top card has been turned over!")

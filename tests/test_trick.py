@@ -31,42 +31,6 @@ def test_score_cards_less_than_players_fail(hand_fixture):
     t.score()
 
 
-def test_fully_played_game_screw_dealer(setup_game):
-    g = setup_game
-
-    while not g.is_over:
-        # game starts with no hands
-        g.new_hand()
-        print("=" * 50, "Hand number: {}".format(len(g.hands)), "=" * 50)
-        the_hand = g.hands[-1]
-        the_hand.bid(g.hands[-1].players[0], "pass")
-        the_hand.bid(g.hands[-1].players[0], "pass")
-        the_hand.bid(g.hands[-1].players[0], "pass")
-        the_hand.bid(g.hands[-1].players[0], "pass")
-
-        the_hand.top_card_turned_over = True
-
-        the_hand.bid(g.hands[-1].players[0], "pass")
-        the_hand.bid(g.hands[-1].players[0], "pass")
-        the_hand.bid(g.hands[-1].players[0], "pass")
-
-        # next one should throw screw the dealer
-        with pytest.raises(BidException):
-            the_hand.bid(the_hand.players[0], "pass")
-
-        bid_suit = random.choice(g.hands[-1].possible_trump)
-        the_hand.bid(the_hand.players[0], "set_trump", bid_suit)
-
-        assert len(the_hand.tricks) == 0
-
-        for i in range(0, 5):
-            trick = Trick(hand=the_hand)
-            if i > 0:
-                trick.set_order_by_last_winner()
-            _test_trick(trick, g)
-        print("=" * 50, "Scoring hand {}".format(len(g.hands)), "=" * 50)
-        the_hand.score()
-
 
 def _test_trick(trick, game):
     the_hand = game.hands[-1]

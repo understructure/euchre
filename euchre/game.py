@@ -24,7 +24,8 @@ class Game:
 
     @property
     def dealer(self):
-        return self.hands[-1].players[0]
+        return self.hands[-1].dealer
+        # return self.hands[-1].players[0]
 
     @property
     def is_over(self):

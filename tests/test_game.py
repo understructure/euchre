@@ -1,6 +1,9 @@
+import pytest
+import random
+
 from euchre.card import Card
 from euchre.deck import Deck
-
+from tests.test_trick import _test_trick, Trick, BidException
 
 def test_cards_dealt_properly(random_game_start, hand_fixture):
     game = random_game_start
@@ -126,3 +129,62 @@ def test_set_players_order(random_game_start):
 def test_game_points_setup_correctly(setup_game):
     game = setup_game
     assert list(game.scores.values()) == [0, 0]
+
+
+def test_fully_played_game_screw_dealer(setup_game):
+    g = setup_game
+
+    while not g.is_over:
+        # game starts with no hands
+        g.new_hand()
+        print("Dealer is now {}".format(g.players[0]))
+        print("=" * 50, "Hand number: {}".format(len(g.hands)), "=" * 50)
+        the_hand = g.hands[-1]
+        print("Top card is now {}".format(the_hand.top_card))
+        print("Players: {}".format(the_hand.players))
+        bid_player = g.hands[-1].players[0]
+        the_hand.bid(bid_player, "pass")
+        print(str(bid_player) + " passes")
+
+        bid_player = g.hands[-1].players[0]
+        the_hand.bid(bid_player, "pass")
+        print(str(bid_player) + " passes")
+
+        bid_player = g.hands[-1].players[0]
+        the_hand.bid(bid_player, "pass")
+        print(str(bid_player) + " passes")
+
+        bid_player = g.hands[-1].players[0]
+        the_hand.bid(bid_player, "pass")
+        print(str(bid_player) + " passes")
+
+        the_hand.top_card_turned_over = True
+
+        bid_player = g.hands[-1].players[0]
+        the_hand.bid(bid_player, "pass")
+        print(str(bid_player) + " passes")
+
+        bid_player = g.hands[-1].players[0]
+        the_hand.bid(bid_player, "pass")
+        print(str(bid_player) + " passes")
+
+        bid_player = g.hands[-1].players[0]
+        the_hand.bid(bid_player, "pass")
+        print(str(bid_player) + " passes")
+
+        # next one should throw screw the dealer
+        with pytest.raises(BidException):
+            the_hand.bid(the_hand.players[0], "pass")
+
+        bid_suit = random.choice(g.hands[-1].possible_trump)
+        the_hand.bid(the_hand.players[0], "set_trump", bid_suit)
+        print("Trump set as {}".format(the_hand.trump))
+        assert len(the_hand.tricks) == 0
+
+        for i in range(0, 5):
+            trick = Trick(hand=the_hand)
+            if i > 0:
+                trick.set_order_by_last_winner()
+            _test_trick(trick, g)
+        print("=" * 50, "Scoring hand {}".format(len(g.hands)), "=" * 50)
+        the_hand.score()
