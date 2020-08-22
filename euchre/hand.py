@@ -16,11 +16,13 @@ a side is said to be "at the bridge" when it has scored
 """
 import logging
 import operator
+
 # import collections, functools,
 
 logger = logging.getLogger("euchre")
 
 from euchre.suit import Suit
+
 suit = Suit()
 
 
@@ -110,20 +112,34 @@ class Hand:
                 self.trump = self.top_card.suit
                 self.bidding_team = [x for x in self.teams if player in x][0]
             else:
-                raise BidException("Can't call it up once top card has been turned over!")
+                raise BidException(
+                    "Can't call it up once top card has been turned over!"
+                )
         elif action == "set_trump":
             if trump in self.possible_trump:
                 self.trump = trump
-                logger.debug("Trump successfully set as {} for this hand".format(self.trump))
+                logger.debug(
+                    "Trump successfully set as {} for this hand".format(self.trump)
+                )
                 self.bidding_team = player.team
                 assert player in self.players
-                partner_name = [x.name for x in self.players if x.team == player.team and x != player][0]
-                logger.info("Bidding team: {} (players {} and {})".format(self.bidding_team, player.name, partner_name))
+                partner_name = [
+                    x.name
+                    for x in self.players
+                    if x.team == player.team and x != player
+                ][0]
+                logger.info(
+                    "Bidding team: {} (players {} and {})".format(
+                        self.bidding_team, player.name, partner_name
+                    )
+                )
                 if not alone:
                     self.players = self.players_original_order
                 else:
                     self.bid_alone = True
-                    partner = [x for x in self.players if x.team == player.team and x != player]
+                    partner = [
+                        x for x in self.players if x.team == player.team and x != player
+                    ]
                     self.players.remove(partner)
                 self.rotate_active_player()
                 self.phase = "playing"
@@ -157,4 +173,6 @@ class Hand:
                 points = 2
             self.winning_points = points
         else:
-            print("Can't score hand yet, only {} trick(s) of 5 played".format(num_tricks))
+            print(
+                "Can't score hand yet, only {} trick(s) of 5 played".format(num_tricks)
+            )

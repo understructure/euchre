@@ -8,12 +8,12 @@ class Logger(logging.Logger):
 
     def info(self, msg, *args, **kwargs):
         if "msg_type" in kwargs:
-            msg_type = kwargs['msg_type']
+            msg_type = kwargs["msg_type"]
             message_type_msg = self._get_message_by_message_type(msg_type)
         else:
             msg_type = ""
             message_type_msg = msg
-        message = {"level": "INFO", "type:" msg_type, "msg": message_type_msg}
+        message = {"level": "INFO", "type": msg_type, "msg": message_type_msg}
         return message
 
     def _get_message_by_message_type(self, msg_type):

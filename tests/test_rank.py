@@ -3,12 +3,16 @@ from euchre.rank import Rank
 
 def test_names():
     _r = Rank()
-    assert sorted(list(_r.names.keys())) == sorted(["7", "8", "9", "10", "J", "Q", "K", "A"])
+    assert sorted(list(_r.names.keys())) == sorted(
+        ["7", "8", "9", "10", "J", "Q", "K", "A"]
+    )
 
 
 def test_natural_ranks():
     _r = Rank()
-    assert sorted(list(_r.natural_ranks)) == sorted(["Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", "Ace"])
+    assert sorted(list(_r.natural_ranks)) == sorted(
+        ["Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King", "Ace"]
+    )
 
 
 def test_non_bowers():

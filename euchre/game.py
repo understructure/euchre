@@ -5,6 +5,7 @@ import random
 
 from euchre.hand import Hand
 from euchre.deck import Deck
+
 # from collections import Counter
 
 
@@ -25,7 +26,6 @@ class Game:
     @property
     def dealer(self):
         return self.hands[-1].dealer
-        # return self.hands[-1].players[0]
 
     @property
     def is_over(self):
@@ -53,32 +53,29 @@ class Game:
         deal_team = random.choice(self.teams)
         other_team = [x for x in self.teams if x != deal_team][0]
         deal_player = random.choice([x for x in players if x.team == deal_team])
-        deal_partner = [x for x in players if x.team == deal_team and x != deal_player][0]
+        deal_partner = [x for x in players if x.team == deal_team and x != deal_player][
+            0
+        ]
         other_players = [x for x in players if x.team == other_team]
         ordered_players = [
             deal_player,
             other_players[0],
             deal_partner,
-            other_players[1]
+            other_players[1],
         ]
         return ordered_players
-
-    # def get_scores(self):
-    #     rez = {t: 0 for t in self.teams}
-    #     for hand in self.hands:
-    #         if hand.winning_team:
-    #             rez[hand.winning_team] += hand.winning_points
-    #         else:
-    #             print("No winner for hand yet")
-    #     return rez
 
     def new_hand(self):
         deck = Deck(low_rank=self.low_rank)
         self.rotate_dealer()
-        self.hands.append(Hand(players=self.players,
-                               teams=self.teams,
-                               deal_style=self.deal_style,
-                               deck=deck))
+        self.hands.append(
+            Hand(
+                players=self.players,
+                teams=self.teams,
+                deal_style=self.deal_style,
+                deck=deck,
+            )
+        )
 
     def rotate_dealer(self):
         temp = self.players

@@ -4,6 +4,7 @@ from euchre.card import Card
 from euchre.player import Player
 from euchre.team import Team
 
+
 def test_create_player():
     t1 = Team(id=1)
     p1 = Player(name="Monkeyboy", player_id=1, team=t1)
@@ -42,6 +43,7 @@ def test_get_playable_cards_no_trump(player_fixture):
     playable = p1.get_playable_cards(led_card, trump)
     assert len(playable) == 3
     print("Playable cards: {}".format(", ".join([repr(x) for x in playable])))
+
 
 def test_bid_action():
     pass

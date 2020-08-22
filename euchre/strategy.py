@@ -33,7 +33,7 @@ def bid_strategy(bid_phase, is_dealer, call_prob={"bidding": 0.4, "screwing": 0.
         if bid_phase == "screwing" and is_dealer:
             rez = "call_it"
         else:
-            x = random.choice(range(100)) / 100.
+            x = random.choice(range(100)) / 100.0
             print("Bid probability is {}, random is {}".format(bid_prob, x))
             if x <= bid_prob:
                 rez = "call_it"
@@ -41,6 +41,4 @@ def bid_strategy(bid_phase, is_dealer, call_prob={"bidding": 0.4, "screwing": 0.
                 rez = "pass_it"
         return rez
     except ValueError:
-        raise("Unknown bid phase {}".format(bid_phase))
-
-
+        raise ("Unknown bid phase {}".format(bid_phase))

@@ -21,7 +21,9 @@ def hand_fixture():
     p4 = Player(name="Player 3", player_id=3, team=t2)
     t1 = [p1, p3]
     t2 = [p2, p4]
-    return Hand(players=[p1, p2, p3, p4], teams=[t1, t2], deal_style=[3, 2, 3, 2], deck=deck)
+    return Hand(
+        players=[p1, p2, p3, p4], teams=[t1, t2], deal_style=[3, 2, 3, 2], deck=deck
+    )
 
 
 @pytest.fixture()
@@ -86,7 +88,6 @@ def trick_team2_wins_fixture(setup_game, hand_fixture):
     return t
 
 
-
 # Game has players
 # players have cards
 # game has hands
@@ -95,12 +96,12 @@ def trick_team2_wins_fixture(setup_game, hand_fixture):
 # Player playing card = remove card from hand, add card to trick
 
 # Game state:
-    # Dealer
-    # teams
-    # who's turn
-    # hand original dealer
-    # trick current dealer
-    # Trump
-    # current hand
-    # hand status (active vs. over)
-    # score
+# Dealer
+# teams
+# who's turn
+# hand original dealer
+# trick current dealer
+# Trump
+# current hand
+# hand status (active vs. over)
+# score

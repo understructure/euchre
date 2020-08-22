@@ -25,6 +25,7 @@ from euchre.rank import Rank
 r = Rank()
 suit = Suit()
 
+
 class IllegalArgumentError(ValueError):
     pass
 
@@ -35,15 +36,22 @@ class Deck:
         self.high_low_rank = 9
         low_rank = int(low_rank)
         if not self.low_low_rank <= low_rank <= self.high_low_rank:
-            raise IllegalArgumentError("Low rank of {} not permitted, must be between {} and {}"
-                                       .format(low_rank, self.low_low_rank, self.high_low_rank))
+            raise IllegalArgumentError(
+                "Low rank of {} not permitted, must be between {} and {}".format(
+                    low_rank, self.low_low_rank, self.high_low_rank
+                )
+            )
         self.suits = list(suit.names.keys())
         # apparently there are variations that play with 8's or 7's as the low card
         # # low_rank will be used to implement this
-        self.ranks = ['A', 'K', 'Q', 'J'] + [str(x) for x in list(range(10, low_rank-1, -1))]
+        self.ranks = ["A", "K", "Q", "J"] + [
+            str(x) for x in list(range(10, low_rank - 1, -1))
+        ]
         self.non_bowers = [x for x in self.ranks if x != "J"]
-        self.cards = [Card(**dict(zip(['card_rank', 'card_suit'], x)))
-                      for x in itertools.product(self.ranks, self.suits)]
+        self.cards = [
+            Card(**dict(zip(["card_rank", "card_suit"], x)))
+            for x in itertools.product(self.ranks, self.suits)
+        ]
         random.shuffle(self.cards)
 
     def get_card_ranks_by_trump_and_led(self, trump, led_card):
@@ -57,9 +65,10 @@ class Deck:
         if trump is not None:
             left_bower = Card(card_rank="J", card_suit=suit.d_bower_suits[trump])
             right_bower = Card(card_rank="J", card_suit=trump)
-            lst_out = [right_bower, left_bower] + \
-                      [Card(**dict(zip(['card_rank', 'card_suit'], x)))
-                       for x in itertools.product(self.non_bowers, trump)]
+            lst_out = [right_bower, left_bower] + [
+                Card(**dict(zip(["card_rank", "card_suit"], x)))
+                for x in itertools.product(self.non_bowers, trump)
+            ]
             if not (led_suit == trump or led_card == left_bower):
                 lst_extra = self.get_non_trump_led_suit_ranks(trump, led_suit)
         else:
@@ -75,9 +84,13 @@ class Deck:
         :return:
         """
         if led_suit in [trump, suit.d_bower_suits[trump]]:
-            lst_extra = [Card(**dict(zip(['card_rank', 'card_suit'], x))) for x in
-                         itertools.product(self.non_bowers, led_suit)]
+            lst_extra = [
+                Card(**dict(zip(["card_rank", "card_suit"], x)))
+                for x in itertools.product(self.non_bowers, led_suit)
+            ]
         else:
-            lst_extra = [Card(**dict(zip(['card_rank', 'card_suit'], x))) for x in
-                         itertools.product(self.ranks, led_suit)]
+            lst_extra = [
+                Card(**dict(zip(["card_rank", "card_suit"], x)))
+                for x in itertools.product(self.ranks, led_suit)
+            ]
         return lst_extra

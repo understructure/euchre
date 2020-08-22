@@ -5,8 +5,16 @@ I hold information about rank names and bowers
 
 class Rank:
     def __init__(self):
-        self.names = {"7": "Seven", "8": "Eight", "9": "Nine", "10": "Ten",
-                      "J": "Jack", "Q": "Queen", "K": "King", "A": "Ace"}
+        self.names = {
+            "7": "Seven",
+            "8": "Eight",
+            "9": "Nine",
+            "10": "Ten",
+            "J": "Jack",
+            "Q": "Queen",
+            "K": "King",
+            "A": "Ace",
+        }
 
     @property
     def natural_ranks(self):

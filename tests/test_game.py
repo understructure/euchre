@@ -5,6 +5,7 @@ from euchre.card import Card
 from euchre.deck import Deck
 from tests.test_trick import _test_trick, Trick, BidException
 
+
 def test_cards_dealt_properly(random_game_start, hand_fixture):
     game = random_game_start
     # cards not initially dealt to players
@@ -23,8 +24,9 @@ def test_cards_dealt_properly(random_game_start, hand_fixture):
     print(len(the_hand.deck.cards))
     print(the_hand.top_card)
     # make sure all cards accounted for
-    assert not [x for x in lst_player_cards +
-            non_hand_cards if x not in fresh_deck.cards]
+    assert not [
+        x for x in lst_player_cards + non_hand_cards if x not in fresh_deck.cards
+    ]
     # for x in fresh_deck.cards:
     #     if x not in lst_player_cards + game_cards:
     #         print(x)

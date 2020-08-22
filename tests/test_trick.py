@@ -31,12 +31,13 @@ def test_score_cards_less_than_players_fail(hand_fixture):
     t.score()
 
 
-
 def _test_trick(trick, game):
     the_hand = game.hands[-1]
     for p in the_hand.players:
         if p != the_hand.players[0]:
-            playable_cards = p.get_playable_cards(led_card=trick.led_card, trump=the_hand.trump)
+            playable_cards = p.get_playable_cards(
+                led_card=trick.led_card, trump=the_hand.trump
+            )
         else:
             playable_cards = p.cards
         play_card = random.choice(playable_cards)
@@ -44,5 +45,12 @@ def _test_trick(trick, game):
 
     trick.score()
     the_hand.tricks.append(trick)
-    print([x for x in zip(game.hands[-1].tricks[-1].players, game.hands[-1].tricks[-1].cards)])
+    print(
+        [
+            x
+            for x in zip(
+                game.hands[-1].tricks[-1].players, game.hands[-1].tricks[-1].cards
+            )
+        ]
+    )
     print("Trick winner: {}".format(game.hands[-1].tricks[-1].winner))

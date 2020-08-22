@@ -33,17 +33,24 @@ class Trick:
             self.cards.append(card)
             player.cards.remove(card)
         else:
-            raise TrickFullError("{} cards in hand and {} cards in trick, time to score it!"
-                                 .format(len(self.cards), len(self.players)))
+            raise TrickFullError(
+                "{} cards in hand and {} cards in trick, time to score it!".format(
+                    len(self.cards), len(self.players)
+                )
+            )
 
     def score(self):
         if len(self.cards) == len(self.players):
-            card_ranks_by_trump_and_led = \
-                self.hand.deck.get_card_ranks_by_trump_and_led(self.hand.trump, self.led_card)
+            card_ranks_by_trump_and_led = self.hand.deck.get_card_ranks_by_trump_and_led(
+                self.hand.trump, self.led_card
+            )
             self.set_winner(card_ranks_by_trump_and_led)
         else:
-            raise TrickNotScorableYetError("Hand only has {} cards, need {} cards to score it"
-                                           .format(len(self.cards), len(self.players)))
+            raise TrickNotScorableYetError(
+                "Hand only has {} cards, need {} cards to score it".format(
+                    len(self.cards), len(self.players)
+                )
+            )
 
     def set_winner(self, trick_ranked_cards):
         trick_values = []

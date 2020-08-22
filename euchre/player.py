@@ -9,6 +9,7 @@ from euchre.suit import Suit
 
 _suit = Suit()
 
+
 class Player:
     def __init__(self, name, player_id, team):
         self.name = name
@@ -22,8 +23,12 @@ class Player:
 
     def get_playable_cards(self, led_card, trump):
         led_suit = _suit.effective_suit(led_card, trump)
-        led_in_hand = [y for y in self.cards if _suit.effective_suit(y, trump) == led_suit]
-        trump_in_hand = [x for x in self.cards if _suit.effective_suit(x, trump) == trump]
+        led_in_hand = [
+            y for y in self.cards if _suit.effective_suit(y, trump) == led_suit
+        ]
+        trump_in_hand = [
+            x for x in self.cards if _suit.effective_suit(x, trump) == trump
+        ]
 
         if not led_in_hand:
             # can play anything
@@ -68,5 +73,7 @@ class Player:
             if alone:
                 hand.set_bid_alone()
         else:
-            logger.error("ERROR - tried to call trump when top card already turned over!")
+            logger.error(
+                "ERROR - tried to call trump when top card already turned over!"
+            )
             raise
